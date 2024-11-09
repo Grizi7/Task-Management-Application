@@ -37,6 +37,13 @@
                                     >
                                         Dashboard
                                     </a>
+                                    <a class="nav-link" action="{{route('logout')}}"  onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                  <i class="fa fa-sign-out-alt"></i> Logout
+                </a>
+                <form id="logout-form" action="{{route('logout')}}" method="POST" class="d-none">
+                  @method('delete')
+                  @csrf
+                </form>
                                 @else
                                     <a
                                         href="{{ route('login') }}"
