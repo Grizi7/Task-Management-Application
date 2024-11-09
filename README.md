@@ -1,66 +1,141 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Task Management Application
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+A simple task management application built with Laravel. This app allows users to create, view, edit, and delete tasks, as well as register and log in to manage their tasks.
 
-## About Laravel
+## Features
+- User registration and authentication
+- CRUD operations for tasks
+- Each user has their own task list
+- Task completion status tracking
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+## Requirements
+- PHP >= 8.1
+- Composer
+- MySQL
+- Laravel => 11
+## Installation
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+### 1. Clone the Repository
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+```bash
+git clone https://github.com/Grizi7/Task-Management-Application.git
+```
 
-## Learning Laravel
+### 2. Install Dependencies
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Run the following command to install PHP and Composer dependencies:
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+```bash
+composer install
+```
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+### 3. Set Up Environment
 
-## Laravel Sponsors
+- Duplicate the `.env.example` file and rename it to `.env`.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+```bash
+cp .env.example .env
+```
 
-### Premium Partners
+- Open `.env` and set up your environment variables, particularly for the database connection:
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+```env
+DB_CONNECTION=mysql
+DB_HOST=127.0.0.1
+DB_PORT=3306
+DB_DATABASE=task_manager
+DB_USERNAME=root
+DB_PASSWORD=your_password
+```
 
-## Contributing
+### 4. Generate Application Key
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+Generate an application encryption key:
 
-## Code of Conduct
+```bash
+php artisan key:generate
+```
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+### 5. Set Up Database
 
-## Security Vulnerabilities
+- Create a new database named `task_manager` in MySQL or the database of your choice.
+- Run the migrations to set up the necessary tables:
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+php artisan migrate --seed
+```
 
-## License
+### 6. Run the Application
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+Start the local development server:
+
+```bash
+php artisan serve
+```
+
+By default, the application will be available at `http://127.0.0.1:8000`.
+
+## Usage
+
+### Test User Credentials
+
+Use the following credentials to log in as a test user:
+
+- **Email**: `test@example.com`
+- **Password**: `password`
+
+These credentials will help you quickly test the application's authentication and task management features.
+
+...
+### Authentication
+
+- **Register**: Go to `http://127.0.0.1:8000/register` to create a new account.
+- **Login**: Go to `http://127.0.0.1:8000/login` to log in.
+
+### Task Management
+
+Once logged in, you can:
+- **Create a New Task**: Click on "Add New Task" to create a new task with a title and optional description.
+- **View Tasks**: The dashboard displays all tasks you have created.
+- **Finish a Task**: Click "Finish" to finish an existing task.
+- **Edit a Task**: Click "Edit" to modify an existing task.
+- **Delete a Task**: Click "Delete" to remove a task from your list.
+
+## Code Structure
+
+### Models
+- **User**: The `User` model is used for user authentication.
+- **Task**: The `Task` model is used to represent each task, associated with a user.
+
+### Controllers
+- **TaskController**: Manages CRUD operations for tasks.
+- **Auth Controllers**: `LoginController` and `RegisterController` handle user login and registration.
+
+### Validation
+Validation rules for users registration and login are handled by `RegisterRequest` and `LoginRequest` ensuring each user has a valid credentials as email and password.
+
+Validation rules for tasks are handled by `TaskRequest`, ensuring each task has a title and description.
+
+## Deployment (Local)
+
+1. **Serve Application**: Use the command below to serve the application locally:
+   ```bash
+   php artisan serve
+   ```
+
+2. **Testing Routes**:
+   - `http://127.0.0.1:8000/register` to register a new account
+   - `http://127.0.0.1:8000/login` to log in
+
+3. **Running Migrations**:
+   Ensure the database is properly set up and the migrations have been run to create the required tables.
+
+## Additional Information
+
+- **Database Structure**:
+  - **Users Table**: Contains `id`, `name`, `email`, and `password` and timestamps..
+  - **Tasks Table**: Contains `id`, `title`, `description`, `completed`, `user_id` and timestamps.
+  
+- **Routes**:
+  - Auth routes: `/register`, `/login`, `/logout`
+  - Task routes: `/tasks`, `/tasks/create`, `/tasks/finish/{id}`, `/tasks/edit/{id}`, `/tasks/update/{id}`, `/tasks/delete/{id}`
