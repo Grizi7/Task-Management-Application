@@ -20,7 +20,7 @@
                                         <table class="table mb-4">
                                             <thead>
                                                 <tr>
-                                                    <th scope="col">No.</th>
+                                                    <th scope="col">ID</th>
                                                     <th scope="col">Title</th>
                                                     <th scope="col">Description</th>
                                                     <th scope="col">Status</th>
@@ -28,9 +28,9 @@
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                @foreach($tasks as $key => $task)
+                                                @foreach($tasks as $task)
                                                     <tr>
-                                                        <th scope="row">{{ $key+1 }}</th>
+                                                        <th scope="row">{{ $task->id }}</th>
                                                         <td>{{ $task->title }}</td>
                                                         <td>
                                                             <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#taskModal{{ $task->id }}">
@@ -81,6 +81,8 @@
                                                 @endforeach
                                             </tbody>
                                         </table>
+                                        <!-- Display pagination links -->
+                                        {{ $tasks->links('vendor.pagination.bootstrap-5') }}
                                     </div>
                                 @endif    
                                 <a href="{{route('tasks.create')}}" class="btn btn-primary mb-3 float-end">Create New Task</a>

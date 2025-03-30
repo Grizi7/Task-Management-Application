@@ -9,7 +9,7 @@ class TaskController extends Controller
 {
     public function index()
     {
-        $tasks = auth()->user()->tasks;
+        $tasks = auth()->user()->tasks()->paginate(10);
         return view('tasks', [
             'title' => 'Tasks',
             'do' => 'manage',
