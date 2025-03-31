@@ -56,8 +56,16 @@ class AuthController extends Controller
                         'error' => 'The verification code is invalid.',
                     ]);
                 }
+
+                $user->email_verified_at = now();
+                $user->email_verification_token = null;
+                $user->save();
+                
                 auth()->login($user);
                 $request->session()->regenerate();
+
+                return redirect('/')->with('success', 'Email verified successfully. You are now logged in.');
+
             }
         }
         
