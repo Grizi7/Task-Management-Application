@@ -2,6 +2,7 @@
 
 namespace App\Mail;
 
+use App\Models\User;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -14,18 +15,18 @@ class VerficationCodeEmail extends Mailable
     use Queueable, SerializesModels;
 
     /**
-     * The email verification token.
+     * The User.
      *
-     * @var string
+     * @var \App\Models\User
      */
-    public string $verificationToken;
+    public User $user;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(string $verificationToken)
+    public function __construct(User $user)
     {
-        $this->verificationToken = $verificationToken;
+        $this->user = $user;
     }
 
     /**
@@ -46,7 +47,7 @@ class VerficationCodeEmail extends Mailable
         return new Content(
             view: 'email.verify',
             with: [
-                'verificationToken' => $this->verificationToken,
+                'user' => $this->user,
             ],
         );
     }

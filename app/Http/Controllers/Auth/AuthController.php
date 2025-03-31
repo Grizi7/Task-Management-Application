@@ -32,7 +32,7 @@ class AuthController extends Controller
 
         // Send verification email
         try {
-            Mail::to($user->email)->send(new VerficationCodeEmail($user->email_verification_token));
+            Mail::to($user->email)->send(new VerficationCodeEmail($user));
         } catch (\Exception $e) {
             Log::error('Email verification mail could not be sent to user with email: ' . $user->email . '. Error: ' . $e->getMessage(), [
                 'exception' => $e
@@ -43,8 +43,24 @@ class AuthController extends Controller
         return redirect('/verify-email')
             ->with('success', 'Verification code sent to your email. Please check your inbox.');
     }
-    public function showVerifyEmailForm()
+    public function showVerifyEmailForm(Request $request)
     {
+        if($request->token){
+            $data = explode('|', $request->token);
+            $id = $data[0];
+            $user = User::findOrFail($id);
+            if($user){
+                $code = $data[1];
+                if($user->email_verification_token !== $code){
+                    return redirect()->route('verify-email')->withErrors([
+                        'error' => 'The verification code is invalid.',
+                    ]);
+                }
+                auth()->login($user);
+                $request->session()->regenerate();
+            }
+        }
+        
         return view('auth.verify-email', [
             'title' => 'Verify Email'
         ]);
@@ -71,7 +87,17 @@ class AuthController extends Controller
         // Log the user in
         auth()->login($user);
         $request->session()->regenerate();
-        
+
+        // Send a success email or notification here
+
+        // try {
+        //     Mail::to($user->email)->send(new VerficationCodeEmail($user->email_verification_token));
+        // } catch (\Exception $e) {
+        //     Log::error('Email verification mail could not be sent to user with email: ' . $user->email . '. Error: ' . $e->getMessage(), [
+        //         'exception' => $e
+        //     ]);
+        // }
+
         // Redirect to the intended page
         return redirect('/')->with('success', 'Email verified successfully. You are now logged in.');
     }
