@@ -40,4 +40,11 @@ class LoginController extends Controller
 
         return redirect('/');
     }
+
+    public function showVerifyEmailForm()
+    {
+        return view('auth.verify-email', [
+            'title' => 'Verify Email'
+        ]);
+    }
 }
