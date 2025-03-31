@@ -32,10 +32,12 @@ class RegisterController extends Controller
         try {
             Mail::to($user->email)->send(new VerficationCodeEmail($user->email_verification_token));
         } catch (\Exception $e) {
-            Log::error('Email verification mail could not be sent to user with email: ' . $user->email);
+            Log::error('Email verification mail could not be sent to user with email: ' . $user->email . '. Error: ' . $e->getMessage(), [
+                'exception' => $e
+            ]);
         }
-        
-        
+
+
         return redirect('/verify-email')
             ->with('success', 'Verification code sent to your email. Please check your inbox.');
 
