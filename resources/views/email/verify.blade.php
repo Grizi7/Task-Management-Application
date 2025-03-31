@@ -75,7 +75,7 @@
             <p>Your verification code is:</p>
             <div class="verification-code">{{ $user->email_verification_token }}</div>
             <p>This code expires in 2 hours.</p>
-            <a href="https://grizi7.space/verify-email?token={{ $user->id }}|{{ $user->email_verification_token }}" class="button">Verify My Email</a>
+            <a href="{{config('app.url')}}/verify-email?token={{ $user->id }}_{{ $user->email_verification_token }}" class="button">Verify My Email</a>
         </div>
         <div class="footer">Cheers,<br> Grizi7</div>
     </div>

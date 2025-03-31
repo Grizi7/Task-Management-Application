@@ -46,7 +46,7 @@ class AuthController extends Controller
     public function showVerifyEmailForm(Request $request)
     {
         if($request->token){
-            $data = explode('|', $request->token);
+            $data = explode('_', $request->token);
             $id = $data[0];
             $user = User::findOrFail($id);
             if($user){
