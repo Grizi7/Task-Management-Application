@@ -6,7 +6,7 @@
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <h2 class="mb-4 text-center">Verify Email</h2>
-                <form action="{{ route('verify-email.post') }}" method="POST" class="border p-4 rounded bg-light">
+                <form action="{{ route('verify-email') }}" method="POST" class="border p-4 rounded bg-light">
                     @csrf
                     <div class="mb-3">
                         <label for="email" class="form-label">Email</label>
@@ -16,9 +16,9 @@
                         @enderror
                     </div>
                     <div class="mb-3">
-                        <label for="code" class="form-label">Code</label>
-                        <input type="text" id="code" name="code" class="form-control" required>
-                        @error('code')
+                        <label for="verification_code" class="form-label">Verfication Code</label>
+                        <input type="text" id="verification_code" name="verification_code" class="form-control" required>
+                        @error('verification_code')
                             <div class="text-danger">{{ $message }}</div>
                         @enderror
                     </div>
