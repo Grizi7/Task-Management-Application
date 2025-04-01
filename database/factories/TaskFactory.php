@@ -19,7 +19,10 @@ class TaskFactory extends Factory
         return [
             'title' => $this->faker->text(14),
             'description' => $this->faker->paragraph,
-            'completed' => false,
+            'due_date' => $this->faker->dateTimeBetween('now', '+1 month'),
+            'priority' => $this->faker->randomElement(['low', 'medium', 'high']),
+            'status' => $this->faker->randomElement(['pending', 'in_progress', 'completed']),
+            'category' => $this->faker->word,
         ];
     }
 }

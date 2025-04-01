@@ -23,7 +23,9 @@
                                                     <th scope="col">ID</th>
                                                     <th scope="col">Title</th>
                                                     <th scope="col">Description</th>
+                                                    <th scope="col">Priority</th>
                                                     <th scope="col">Status</th>
+                                                    <th scope="col">Due Date</th>
                                                     <th scope="col" class="text-center">Actions</th>
                                                 </tr>
                                             </thead>
@@ -38,10 +40,23 @@
                                                             </button>
                                                         </td>
                                                         <td>
-                                                            <span class="badge {{ $task->completed ? 'bg-success' : 'bg-warning' }}">
-                                                                {{ $task->completed ? 'Completed' : 'Pending' }}
-                                                            </span>
+                                                            @if($task->priority == 'high')
+                                                                <span class="badge bg-danger">High</span>
+                                                            @elseif($task->priority == 'medium')
+                                                                <span class="badge bg-warning">Medium</span>
+                                                            @else
+                                                                <span class="badge bg-success">Low</span>
+                                                            @endif
+                                                        <td>
+                                                            @if($task->status == 'completed')
+                                                                <span class="badge bg-success">Completed</span>
+                                                            @elseif($task->status == 'in_progress')
+                                                                <span class="badge bg-secondary">In Progress</span>
+                                                            @else
+                                                                <span class="badge bg-warning">Pending</span>
+                                                            @endif
                                                         </td>
+                                                        <td>{{ \Carbon\Carbon::parse($task->due_date)->format('d-m-Y H:i') }}</td>
                                                         <td>
                                                             <a href="{{route('tasks.edit', $task->id)}}" class="btn btn-primary">Edit</a>
                                                             <a href="{{ route('tasks.destroy', $task->id) }}" class="btn btn-danger ms-1" onclick="event.preventDefault(); document.getElementById('delete-form-{{ $task->id }}').submit();">Delete</a>
@@ -49,15 +64,6 @@
                                                                 @method('DELETE')
                                                                 @csrf
                                                             </form>
-                                                            @if (!$task->completed)
-                                                                
-                                                                <a href="{{ route('tasks.finish', $task->id) }}" class="btn btn-success ms-1" onclick="event.preventDefault(); document.getElementById('complete-form-{{ $task->id }}').submit();">finish</a>
-                                                                <form id="complete-form-{{ $task->id }}" action="{{ route('tasks.finish', $task->id) }}" method="POST" style="display: none;">
-                                                                    @method('PUT')
-                                                                    @csrf
-                                                                </form>
-
-                                                            @endif
                                                         </td>
                                                     </tr>
 
@@ -97,6 +103,25 @@
                                         <label for="title" class="form-label">Title</label>
                                         <input type="text" class="form-control" id="title" name="title" required>
                                         @error('title')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="priority" class="form-label">Priority</label>
+                                        <select class="form-select" id="priority" name="priority" required>
+                                            <option value="" disabled selected>Select Priority</option>
+                                            <option value="high">High</option>
+                                            <option value="medium">Medium</option>
+                                            <option value="low">Low</option>
+                                        </select>
+                                        @error('priority')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="due_date" class="form-label">Due Date</label>
+                                        <input type="datetime-local" class="form-control" id="due_date" name="due_date" required>
+                                        @error('due_date')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
