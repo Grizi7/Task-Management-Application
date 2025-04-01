@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Models\User;
+use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Mail\VerficationCodeEmail;
 use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Http\RedirectResponse;
 use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\RegisterRequest;
 
@@ -43,37 +45,66 @@ class AuthController extends Controller
         return redirect('/verify-email')
             ->with('success', 'Verification code sent to your email. Please check your inbox.');
     }
-    public function showVerifyEmailForm(Request $request)
+
+    /**
+     * Show the email verification form.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\View\View
+     */
+    public function showVerifyEmailForm(Request $request): RedirectResponse|View
     {
-        if($request->token){
+        if ($request->token) {
+            // Validate token format
             $data = explode('_', $request->token);
-            $id = $data[0];
-            $user = User::findOrFail($id);
-            if($user){
-                $code = $data[1];
-                if($user->email_verification_token !== $code){
-                    return redirect()->route('verify-email')->withErrors([
-                        'error' => 'The verification code is invalid.',
-                    ]);
-                }
-
-                $user->email_verified_at = now();
-                $user->email_verification_token = null;
-                $user->save();
-                
-                auth()->login($user);
-                $request->session()->regenerate();
-
-                return redirect('/')->with('success', 'Email verified successfully. You are now logged in.');
-
+            if (count($data) !== 2) {
+                return redirect()->route('verify-email')->withErrors([
+                    'error' => 'Invalid verification token format.',
+                ]);
             }
+
+            [$id, $code] = $data;
+
+            // Fetch user securely
+            try {
+                $user = User::findOrFail($id);
+            } catch (\Exception $e) {
+                return redirect()->route('verify-email')->withErrors([
+                    'error' => 'User not found or invalid token.',
+                ]);
+            }
+
+            // Validate token
+            if ($user->email_verification_token !== $code) {
+                return redirect()->route('verify-email')->withErrors([
+                    'error' => 'The verification code is invalid.',
+                ]);
+            }
+
+            // Update user verification status
+            $user->email_verified_at = now();
+            $user->email_verification_token = null;
+            $user->save();
+
+            // Log in the user securely
+            auth()->login($user);
+            $request->session()->regenerate();
+
+            return redirect('/')->with('success', 'Email verified successfully. You are now logged in.');
         }
-        
+
         return view('auth.verify-email', [
             'title' => 'Verify Email'
         ]);
     }
-    public function verifyEmail(Request $request)
+    
+    /**
+     * Verify the email address of the user.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function verifyEmail(Request $request): RedirectResponse
     {
         $request->validate([
             'email' => 'required|email|exists:users,email',
