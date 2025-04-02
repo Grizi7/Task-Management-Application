@@ -110,9 +110,9 @@
                                         <label for="priority" class="form-label">Priority</label>
                                         <select class="form-select" id="priority" name="priority" required>
                                             <option value="" disabled selected>Select Priority</option>
-                                            <option value="high">High</option>
-                                            <option value="medium">Medium</option>
-                                            <option value="low">Low</option>
+                                            <option value="high" {{ old('priority') == 'high' ? 'selected' : '' }}>High</option>
+                                            <option value="medium" {{ old('priority') == 'medium' ? 'selected' : '' }}>Medium</option>
+                                            <option value="low" {{ old('priority') == 'low' ? 'selected' : '' }}>Low</option>
                                         </select>
                                         @error('priority')
                                             <p class="text-danger">{{ $message }}</p>
@@ -120,14 +120,14 @@
                                     </div>
                                     <div class="mb-3">
                                         <label for="due_date" class="form-label">Due Date</label>
-                                        <input type="datetime-local" class="form-control" id="due_date" name="due_date" required>
+                                        <input type="datetime-local" class="form-control" id="due_date" name="due_date" required value="{{ old('due_date') }}">
                                         @error('due_date')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
                                     <div class="mb-3">
                                         <label for="description" class="form-label">Description</label>
-                                        <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                                        <textarea class="form-control" id="description" name="description" rows="3" required>{{ old('description') }}</textarea>
                                         @error('description')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
@@ -146,6 +146,25 @@
                                         <label for="title" class="form-label">Title</label>
                                         <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" required>
                                         @error('title')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="priority" class="form-label">Priority</label>
+                                        <select class="form-select" id="priority" name="priority" required>
+                                            <option value="" disabled>Select Priority</option>
+                                            <option value="high" {{ $task->priority == 'high' ? 'selected' : '' }}>High</option>
+                                            <option value="medium" {{ $task->priority == 'medium' ? 'selected' : '' }}>Medium</option>
+                                            <option value="low" {{ $task->priority == 'low' ? 'selected' : '' }}>Low</option>
+                                        </select>
+                                        @error('priority')
+                                            <p class="text-danger">{{ $message }}</p>
+                                        @enderror
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="due_date" class="form-label">Due Date</label>
+                                        <input type="datetime-local" class="form-control" id="due_date" name="due_date" required value="{{ \Carbon\Carbon::parse($task->due_date)->format('Y-m-d\TH:i') }}">
+                                        @error('due_date')
                                             <p class="text-danger">{{ $message }}</p>
                                         @enderror
                                     </div>
