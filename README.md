@@ -7,12 +7,14 @@ A simple task management application built with Laravel. This app allows users t
 - CRUD operations for tasks
 - Each user has their own task list
 - Task completion status tracking
+- **New:** Notification to remind users of their tasks and due dates
 
 ## Requirements
 - PHP >= 8.1
 - Composer
 - MySQL
 - Laravel => 11
+
 ## Installation
 
 ### 1. Clone the Repository
@@ -86,7 +88,6 @@ Use the following credentials to log in as a test user:
 
 These credentials will help you quickly test the application's authentication and task management features.
 
-...
 ### Authentication
 
 - **Register**: Go to `http://127.0.0.1:8000/register` to create a new account.
@@ -112,30 +113,21 @@ Once logged in, you can:
 - **Auth Controllers**: `LoginController` and `RegisterController` handle user login and registration.
 
 ### Validation
-Validation rules for users registration and login are handled by `RegisterRequest` and `LoginRequest` ensuring each user has a valid credentials as email and password.
+Validation rules for users registration and login are handled by `RegisterRequest` and `LoginRequest`, ensuring each user has valid credentials such as email and password.
 
 Validation rules for tasks are handled by `TaskRequest`, ensuring each task has a title and description.
 
-## Deployment (Local)
+## Deployment
 
-1. **Serve Application**: Use the command below to serve the application locally:
-   ```bash
-   php artisan serve
-   ```
-
-2. **Testing Routes**:
-   - `http://127.0.0.1:8000/register` to register a new account
-   - `http://127.0.0.1:8000/login` to log in
-
-3. **Running Migrations**:
-   Ensure the database is properly set up and the migrations have been run to create the required tables.
+The application is deployed and available at [https://grizi7.space/](https://grizi7.space/).
 
 ## Additional Information
 
 - **Database Structure**:
-  - **Users Table**: Contains `id`, `name`, `email`, and `password` and timestamps..
-  - **Tasks Table**: Contains `id`, `title`, `description`, `completed`, `user_id` and timestamps.
+  - **Users Table**: Contains `id`, `name`, `email`, `password`, and timestamps.
+  - **Tasks Table**: Contains `id`, `title`, `description`, `completed`, `user_id`, and timestamps.
   
 - **Routes**:
   - Auth routes: `/register`, `/login`, `/logout`
   - Task routes: `/tasks`, `/tasks/create`, `/tasks/finish/{id}`, `/tasks/edit/{id}`, `/tasks/update/{id}`, `/tasks/delete/{id}`
+````
