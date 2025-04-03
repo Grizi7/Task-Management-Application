@@ -130,4 +130,3 @@ The application is deployed and available at [https://grizi7.space/](https://gri
 - **Routes**:
   - Auth routes: `/register`, `/login`, `/logout`
   - Task routes: `/tasks`, `/tasks/create`, `/tasks/finish/{id}`, `/tasks/edit/{id}`, `/tasks/update/{id}`, `/tasks/delete/{id}`
-````
