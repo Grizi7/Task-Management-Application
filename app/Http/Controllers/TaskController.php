@@ -2,8 +2,9 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\TaskRequest;
 use App\Models\Task;
+use App\Http\Requests\TaskRequest;
+use App\Notifications\TaskReminderNotification;
 
 class TaskController extends Controller
 {
@@ -59,6 +60,27 @@ class TaskController extends Controller
     public function finish(Task $task)
     {
         $task->update(['completed' => true]);
+        return redirect()->route('tasks.index');
+    }
+
+
+    public function unfinish(Task $task)
+    {
+        $task->update(['completed' => false]);
+        return redirect()->route('tasks.index');
+    }
+    public function show(Task $task)
+    {
+        return view('tasks', [
+            'title' => 'Task Details',
+            'do' => 'show',
+            'task' => $task,
+        ]);
+    }
+    
+    public function notify(Task $task)
+    {
+        $task->user->notify(new TaskReminderNotification($task->user, $task));
         return redirect()->route('tasks.index');
     }
 }

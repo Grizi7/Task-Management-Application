@@ -10,7 +10,7 @@
                     <div class="card rounded-3">
                         <div class="card-body p-4">
                             @if($do == 'manage')
-                            <h4 class="text-center my-3 pb-3">Tasks</h4>
+                                <h4 class="text-center my-3 pb-3">Tasks</h4>
                                 @if($tasks->IsEmpty())
                                     <div class="alert alert-warning" role="alert">
                                         No tasks found. Please create a new task.
@@ -92,7 +92,25 @@
                                     </div>
                                 @endif    
                                 <a href="{{route('tasks.create')}}" class="btn btn-primary mb-3 float-end">Create New Task</a>
-
+                            @elseif($do == 'show')
+                                <h4 class="text-center my-3 pb-3">Task Details</h4>
+                                <div class="mb-3">
+                                    <label for="title" class="form-label">Title</label>
+                                    <input type="text" class="form-control" id="title" name="title" value="{{ $task->title }}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="priority" class="form-label">Priority</label>
+                                    <input type="text" class="form-control" id="priority" name="priority" value="{{ $task->priority }}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="due_date" class="form-label">Due Date</label>
+                                    <input type="text" class="form-control" id="due_date" name="due_date" value="{{ \Carbon\Carbon::parse($task->due_date)->format('d-m-Y H:i') }}" readonly>
+                                </div>
+                                <div class="mb-3">
+                                    <label for="description" class="form-label">Description</label>
+                                    <textarea class="form-control" id="description" name="description" rows="3" readonly>{{ $task->description }}</textarea>
+                                </div>
+                                <a href="{{route('tasks.index')}}" class="btn btn-secondary float-end">Back to Tasks</a>
                             @elseif($do == 'create')
 
                                 <h4 class="text-center my-3 pb-3">Create New Task</h4>

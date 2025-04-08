@@ -18,10 +18,12 @@ Route::delete('/logout', [AuthController::class, 'logout'])->name('logout')->mid
 
 Route::prefix('tasks')->group(function(){
     Route::get('/', [TaskController::class, 'index'])->name('tasks.index');
+    Route::get('/{task:id}', [TaskController::class, 'show'])->name('tasks.show');
     Route::get('/create', [TaskController::class, 'create'])->name('tasks.create');
     Route::post('/', [TaskController::class, 'store'])->name('tasks.store');
     Route::put('/finish/{task:id}', [TaskController::class, 'finish'])->name('tasks.finish');
     Route::get('/edit/{task:id}', [TaskController::class, 'edit'])->name('tasks.edit');
     Route::put('/update/{task:id}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/delete/{task:id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
+    Route::get('/{task:id}/reminder', [TaskController::class, 'notify'])->name('tasks.reminder');
 })->middleware('auth');
