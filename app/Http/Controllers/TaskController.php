@@ -77,10 +77,5 @@ class TaskController extends Controller
             'task' => $task,
         ]);
     }
-    
-    public function notify(Task $task)
-    {
-        $task->user->notify(new TaskReminderNotification($task->user, $task));
-        return redirect()->route('tasks.index');
-    }
+
 }

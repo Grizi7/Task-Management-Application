@@ -1,9 +1,12 @@
 <?php
 
-use App\Http\Controllers\Auth\AuthController;
+use App\Models\Task;
+use App\Events\TaskReminder;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\TaskController;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Broadcast;
+use App\Http\Controllers\Auth\AuthController;
 
 Route::get('/',[HomeController::class, 'index'])->name('home');
 Route::middleware('guest')->group(function () {
@@ -25,5 +28,15 @@ Route::prefix('tasks')->group(function(){
     Route::get('/edit/{task:id}', [TaskController::class, 'edit'])->name('tasks.edit');
     Route::put('/update/{task:id}', [TaskController::class, 'update'])->name('tasks.update');
     Route::delete('/delete/{task:id}', [TaskController::class, 'destroy'])->name('tasks.destroy');
-    Route::get('/{task:id}/reminder', [TaskController::class, 'notify'])->name('tasks.reminder');
 })->middleware('auth');
+
+Route::get('/test-reminder', function () {
+    $task = Task::whereNotNull('user_id')->first();
+
+    if ($task) {
+        broadcast(new TaskReminder($task));
+        return 'Reminder broadcasted for task: ' . $task->title;
+    }
+
+    return 'No task found with user_id';
+});
